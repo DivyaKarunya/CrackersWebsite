@@ -117,7 +117,7 @@
                     <td>Ergonomic optical mouse</td>
                     <td>$20.00</td>
                     <td>
-                        <input type="number" name="qty_mouse" min="0" value="0">
+                        <input type="number" name="qty_mouse" min="0" value="0" onchange="calculateTotal()">
                     </td>
                 </tr>
                 <tr>
@@ -125,7 +125,7 @@
                     <td>RGB backlit mechanical keyboard</td>
                     <td>$65.00</td>
                     <td>
-                        <input type="number" name="qty_keyboard" min="0" value="0">
+                        <input type="number" name="qty_keyboard" min="0" value="0"onchange="calculateTotal()">
                     </td>
                 </tr>
                 <tr>
@@ -133,11 +133,14 @@
                     <td>1080p LED display</td>
                     <td>$150.00</td>
                     <td>
-                        <input type="number" name="qty_monitor" min="0" value="0">
+                        <input type="number" name="qty_monitor" min="0" value="0" onchange="calculateTotal()">
                     </td>
                 </tr>
             </tbody>
         </table>
+        <div class="total-section">
+        Total: $<span id="totalPrice">10</span>
+      </div>
 
         <!-- Additional Notes -->
         <div class="form-group" style="margin-bottom: 20px;">
@@ -148,6 +151,19 @@
         <button type="submit" class="submit-btn">Place Order</button>
     </form>
 </div>
+<script>
+    function calculateTotal() {
+      const price = parseFloat(document.getElementById('product').value);
+      const quantity = parseInt(document.getElementById('quantity').value) || 0;
+      document.getElementById('totalPrice').innerText = (price * quantity).toFixed(2);
+    }
 
+    function handleOrder(e) {
+      e.preventDefault();
+      const name = document.getElementById('fullName').value;
+      const total = document.getElementById('totalPrice').innerText;
+      alert(`Thank you, ${name}! Your order totaling $${total} has been received.`);
+    }
+  </script>
 </body>
 </html>
