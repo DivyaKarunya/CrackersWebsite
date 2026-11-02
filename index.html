@@ -60,6 +60,13 @@
             width: 60px;
             padding: 5px;
         }
+        .total-row {
+            font-weight: bold;
+            background-color: #f9f9f9;
+        }
+        .total-row td {
+            text-align: right;
+        }
         .submit-btn {
             background-color: #28a745;
             color: white;
@@ -105,42 +112,67 @@
         <table>
             <thead>
                 <tr>
+                     <th>Image</th>
                     <th>Product Item</th>
                     <th>Description</th>
                     <th>Price</th>
                     <th>Quantity</th>
+                    <th>Subtotal</th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
+                <tr class="product-row">
+                    <td>
+                        <img src="https://placeholder.com" alt="Wireless Mouse" class="product-img">
+                    </td>
                     <td>Wireless Mouse</td>
                     <td>Ergonomic optical mouse</td>
-                    <td>$20.00</td>
+                    <td class="price" data-value="20.00">$20.00</td>
                     <td>
-                        <input type="number" name="qty_mouse" min="0" value="0" onchange="calculateTotal()">
+                        <input type="number" class="qty-input" name="qty_mouse" min="0" value="0">
                     </td>
+                    <td class="subtotal">$0.00</td>
                 </tr>
-                <tr>
+                <tr class="product-row">
+                    <td>
+                        <img src="https://placeholder.com" alt="Mechanical Keyboard" class="product-img">
+                    </td>
                     <td>Mechanical Keyboard</td>
                     <td>RGB backlit mechanical keyboard</td>
-                    <td>$65.00</td>
+                    <td class="price" data-value="65.00">$65.00</td>
                     <td>
-                        <input type="number" name="qty_keyboard" min="0" value="0"onchange="calculateTotal()">
+                        <input type="number" class="qty-input" name="qty_keyboard" min="0" value="0">
                     </td>
+                    <td class="subtotal">$0.00</td>
                 </tr>
-                <tr>
+                <tr class="product-row">
+                     <td>
+                        <img src="https://placeholder.com" alt="HD Monitor 24\"" class="product-img">
+                    </td>
                     <td>HD Monitor 24"</td>
                     <td>1080p LED display</td>
-                    <td>$150.00</td>
+                    <td class="price" data-value="150.00">$150.00</td>
                     <td>
-                        <input type="number" name="qty_monitor" min="0" value="0" onchange="calculateTotal()">
+                        <input type="number" class="qty-input" name="qty_monitor" min="0" value="0">
                     </td>
+                    <td class="subtotal">$0.00</td>
+                </tr>
+                
+                <!-- Totals Section -->
+                <tr class="total-row">
+                    <td colspan="5">Subtotal:</td>
+                    <td id="cart-subtotal">$0.00</td>
+                </tr>
+                <tr class="total-row">
+                    <td colspan="5">Tax (10%):</td>
+                    <td id="cart-tax">$0.00</td>
+                </tr>
+                <tr class="total-row" style="font-size: 1.1em; color: #007bff;">
+                    <td colspan="5">Total:</td>
+                    <td id="cart-total">$0.00</td>
                 </tr>
             </tbody>
         </table>
-        <div class="total-section">
-        Total: $<span id="totalPrice">10</span>
-      </div>
 
         <!-- Additional Notes -->
         <div class="form-group" style="margin-bottom: 20px;">
@@ -151,19 +183,47 @@
         <button type="submit" class="submit-btn">Place Order</button>
     </form>
 </div>
-<script>
-    function calculateTotal() {
-      const price = parseFloat(document.getElementById('product').value);
-      const quantity = parseInt(document.getElementById('quantity').value) || 0;
-      document.getElementById('totalPrice').innerText = (price * quantity).toFixed(2);
-    }
 
-    function handleOrder(e) {
-      e.preventDefault();
-      const name = document.getElementById('fullName').value;
-      const total = document.getElementById('totalPrice').innerText;
-      alert(`Thank you, ${name}! Your order totaling $${total} has been received.`);
-    }
-  </script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const rows = document.querySelectorAll('.product-row');
+        const cartSubtotalEl = document.getElementById('cart-subtotal');
+        const cartTaxEl = document.getElementById('cart-tax');
+        const cartTotalEl = document.getElementById('cart-total');
+        const TAX_RATE = 0.10; // 10% tax rate
+
+        function calculateTotals() {
+            let orderSubtotal = 0;
+
+            rows.forEach(row => {
+                const price = parseFloat(row.querySelector('.price').getAttribute('data-value'));
+                const qty = parseInt(row.querySelector('.qty-input').value) || 0;
+                
+                // Calculate item subtotal
+                const itemSubtotal = price * qty;
+                orderSubtotal += itemSubtotal;
+                
+                // Update item subtotal text
+                row.querySelector('.subtotal').textContent = `$${itemSubtotal.toFixed(2)}`;
+            });
+
+            // Calculate tax and total
+            const taxAmount = orderSubtotal * TAX_RATE;
+            const finalTotal = orderSubtotal + taxAmount;
+
+            // Update main totals display
+            cartSubtotalEl.textContent = `$${orderSubtotal.toFixed(2)}`;
+            cartTaxEl.textContent = `$${taxAmount.toFixed(2)}`;
+            cartTotalEl.textContent = `$${finalTotal.toFixed(2)}`;
+        }
+
+        // Attach event listeners to all quantity boxes
+        rows.forEach(row => {
+            const input = row.querySelector('.qty-input');
+            input.addEventListener('input', calculateTotals);
+        });
+    });
+</script>
+
 </body>
 </html>
