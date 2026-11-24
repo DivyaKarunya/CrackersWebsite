@@ -266,7 +266,7 @@
                 orderSubtotal += itemSubtotal;
                 
                 // Update item subtotal text
-                row.querySelector('.subtotal').textContent = `$${itemSubtotal.toFixed(2)}`;
+                row.querySelector('.subtotal').textContent = `${itemSubtotal.toFixed(2)}`;
             });
 
             // Calculate tax and total
@@ -274,9 +274,9 @@
             const finalTotal = orderSubtotal + taxAmount;
 
             // Update main totals display
-            cartSubtotalEl.textContent = `$${orderSubtotal.toFixed(2)}`;
-            cartTaxEl.textContent = `$${taxAmount.toFixed(2)}`;
-            cartTotalEl.textContent = `$${finalTotal.toFixed(2)}`;
+            cartSubtotalEl.textContent = `${orderSubtotal.toFixed(2)}`;
+            cartTaxEl.textContent = `${taxAmount.toFixed(2)}`;
+            cartTotalEl.textContent = `${finalTotal.toFixed(2)}`;
         }
 
         // Attach event listeners to all quantity boxes
